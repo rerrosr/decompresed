@@ -10,7 +10,7 @@ int main() {
     }
 
         int count = 0;
-        char c;
+        int c;
         while ((c = fgetc(compressFile)) != '\n')
         {
             if (c == '$') {
@@ -30,8 +30,13 @@ int main() {
     char** wordsA;
     char** wordsB;
 
-    wordsA = (char**)calloc(count/2,sizeof(char*));
-    wordsB = (char**)calloc(count/2,sizeof(char*));
+     if (count > 0) {
+        wordsA = (char**)calloc(count/2,sizeof(char*));
+        wordsB = (char**)calloc(count/2,sizeof(char*));
+    } else {
+        printf("Error: no replacements found\n");
+        exit(1);
+    }
     readWordsFromFile(compressFile,&wordsA,&wordsB,&numReplacements);
 
     int length1 = WordLength(wordsA,numReplacements)+ WordLength(wordsB,numReplacements) + numReplacements*2;
