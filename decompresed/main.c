@@ -30,7 +30,7 @@ int main() {
     char** wordsA;
     char** wordsB;
 
-    if (count > 0) {
+    if (count > 1) {
         wordsA = (char**)calloc(count/2,sizeof(char*));
         wordsB = (char**)calloc(count/2,sizeof(char*));
         if (wordsA == NULL || wordsB == NULL) {
