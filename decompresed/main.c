@@ -53,7 +53,9 @@ int main() {
     printCompressedFile(compressFile, decompressFile,wordsA,wordsB,numReplacements);
 
     fclose(compressFile);
-    fclose(decompressFile);
+    if (decompressFile) {
+        fclose(decompressFile);
+    }
 
     return 0;
 }
