@@ -23,52 +23,41 @@ void readWordsFromFile(FILE* file, char*** wordsA, char*** wordsB, int* numRepla
     *numReplacements = i;
 }
 
-void printCompressedFile(FILE* file,FILE* compressedFile, char** wordsA, char** wordsB, int numReplacements) {
+void printCompressedFile(FILE* file, FILE* compressedFile, char** wordsA, char** wordsB, int numCheck) {
     int size = 16;
-    char* word = (char*)calloc(size,sizeof(char));
+    char *word = (char *) calloc(size, sizeof(char));
 
     while (fscanf(file, "%16s", word) == 1) {
         unsigned long len = strlen(word);
+        char lastChar = '\0';
 
         if (ispunct(word[len - 1])) {
-            char lastChar = word[len - 1];
+            lastChar = word[len - 1];
             word[len - 1] = '\0';
-            int found = 0;
-            for (int i = 0; i < numReplacements; i++) {
-                if (strcmp(word, wordsA[i]) == 0) {
-                    fprintf(compressedFile, "%s%c ", wordsB[i], lastChar);
-                    found = 1;
-                    break;
-                }
-                else if (strcmp(word, wordsB[i]) == 0) {
-                    fprintf(compressedFile, "%s%c ", wordsA[i], lastChar);
-                    found = 1;
-                    break;
-                }
-            }
-            if (!found) {
-                fprintf(compressedFile, "%s%c ", word, lastChar);
-            }
         }
-        else {
-            int found = 0;
-            for (int i = 0; i < numReplacements; i++) {
-                if (strcmp(word, wordsA[i]) == 0) {
-                    fprintf(compressedFile, "%s ", wordsB[i]);
-                    found = 1;
-                    break;
-                }
-                else if (strcmp(word, wordsB[i]) == 0) {
-                    fprintf(compressedFile, "%s ", wordsA[i]);
-                    found = 1;
-                    break;
-                }
+
+        int i = 0;
+        while (i < numCheck && strcmp(word, wordsA[i]) != 0 && strcmp(word, wordsB[i]) != 0) {
+            i++;
+        }
+
+        if (i < numCheck) {
+            if (strcmp(word, wordsA[i]) == 0) {
+                fprintf(compressedFile, "%s", wordsB[i]);
+            } else {
+                fprintf(compressedFile, "%s", wordsA[i]);
             }
-            if (!found) {
-                fprintf(compressedFile, "%s ", word);
-            }
+        } else {
+            fprintf(compressedFile, "%s", word);
+        }
+
+        if (lastChar != '\0') {
+            fprintf(compressedFile, "%c ", lastChar);
+        } else {
+            fprintf(compressedFile, " ");
         }
     }
+
     free(word);
     fseek(compressedFile,0,SEEK_END);
 
