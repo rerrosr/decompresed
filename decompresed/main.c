@@ -9,14 +9,14 @@ int main() {
         exit(1);
     }
 
-        int count = 0;
-        int c;
-        while ((c = fgetc(compressFile)) != '\n')
-        {
-            if (c == '$') {
-                count++;
-            }
+    int count = 0;
+    char c;
+    while ((c = fgetc(compressFile)) != '\n')
+    {
+        if (c == '$') {
+            count++;
         }
+    }
 
     fclose(compressFile);
 
@@ -30,13 +30,18 @@ int main() {
     char** wordsA;
     char** wordsB;
 
-     if (count > 0) {
+    if (count > 0) {
         wordsA = (char**)calloc(count/2,sizeof(char*));
         wordsB = (char**)calloc(count/2,sizeof(char*));
+        if (wordsA == NULL || wordsB == NULL) {
+            printf("Error allocating memory\n");
+            exit(1);
+        }
     } else {
-        printf("Error: no replacements found\n");
-        exit(1);
+        wordsA = NULL;
+        wordsB = NULL;
     }
+
     readWordsFromFile(compressFile,&wordsA,&wordsB,&numReplacements);
 
     int length1 = WordLength(wordsA,numReplacements)+ WordLength(wordsB,numReplacements) + numReplacements*2;
@@ -52,3 +57,4 @@ int main() {
 
     return 0;
 }
+
