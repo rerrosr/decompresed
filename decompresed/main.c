@@ -10,7 +10,7 @@ int main() {
     }
 
     int count = 0;
-    char c;
+    int c;
     while ((c = fgetc(compressFile)) != '\n')
     {
         if (c == '$') {
